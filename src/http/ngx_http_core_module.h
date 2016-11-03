@@ -115,23 +115,23 @@ typedef struct {
 
 
 typedef enum {
-    NGX_HTTP_POST_READ_PHASE = 0,
+    NGX_HTTP_POST_READ_PHASE = 0, // http头接收完
 
-    NGX_HTTP_SERVER_REWRITE_PHASE,
+    NGX_HTTP_SERVER_REWRITE_PHASE, // URL rewrite，在查询URI之前
 
-    NGX_HTTP_FIND_CONFIG_PHASE,
-    NGX_HTTP_REWRITE_PHASE,
-    NGX_HTTP_POST_REWRITE_PHASE,
+    NGX_HTTP_FIND_CONFIG_PHASE, // 根据URI查找location,ngx_http_core_module模块实现 [no]
+    NGX_HTTP_REWRITE_PHASE,     // NGX_HTTP_FIND_CONFIG_PHASE后，重写URI
+    NGX_HTTP_POST_REWRITE_PHASE, // 跳回NGX_HTTP_FIND_CONFIG_PHASE，重新查找location，ngx_http_core_module模块实现 [no]
 
-    NGX_HTTP_PREACCESS_PHASE,
+    NGX_HTTP_PREACCESS_PHASE, // NGX_HTTP_ACCESS_PHASE前，http介入处理的阶段
 
-    NGX_HTTP_ACCESS_PHASE,
-    NGX_HTTP_POST_ACCESS_PHASE,
+    NGX_HTTP_ACCESS_PHASE,    // 是否允许访问nginx服务器
+    NGX_HTTP_POST_ACCESS_PHASE, // 构造拒绝访问http响应 [no]
 
-    NGX_HTTP_TRY_FILES_PHASE,
-    NGX_HTTP_CONTENT_PHASE,
+    NGX_HTTP_TRY_FILES_PHASE, // try_files使用 [no]
+    NGX_HTTP_CONTENT_PHASE, // http内容处理阶段
 
-    NGX_HTTP_LOG_PHASE
+    NGX_HTTP_LOG_PHASE // http纪录access_log日志，ngx_http_log_module模块处理
 } ngx_http_phases;
 
 typedef struct ngx_http_phase_handler_s  ngx_http_phase_handler_t;

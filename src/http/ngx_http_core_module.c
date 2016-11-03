@@ -868,6 +868,7 @@ ngx_http_core_run_phases(ngx_http_request_t *r)
 
     ph = cmcf->phase_engine.handlers;
 
+    // 调用ngx_http_core_generic_phase ngx_http_core_rewrite_phase ngx_http_core_find_config_phase ngx_http_core_post_rewrite_phase ngx_http_core_access_phase等阶段
     while (ph[r->phase_handler].checker) {
 
         rc = ph[r->phase_handler].checker(r, &ph[r->phase_handler]);

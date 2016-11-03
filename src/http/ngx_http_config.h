@@ -13,7 +13,7 @@
 #include <ngx_core.h>
 #include <ngx_http.h>
 
-
+// 不同阶段不同模块的配置信息
 typedef struct {
     void        **main_conf;
     void        **srv_conf;
@@ -22,17 +22,23 @@ typedef struct {
 
 
 typedef struct {
-    ngx_int_t   (*preconfiguration)(ngx_conf_t *cf);
-    ngx_int_t   (*postconfiguration)(ngx_conf_t *cf);
+    ngx_int_t   (*preconfiguration)(ngx_conf_t *cf);                        // 在创建和读取该模块的配置信息之前被调用
+    ngx_int_t   (*postconfiguration)(ngx_conf_t *cf);                       // 在创建和读取该模块的配置信息之后被调用 大多数都是做处理函数用的
 
-    void       *(*create_main_conf)(ngx_conf_t *cf);
-    char       *(*init_main_conf)(ngx_conf_t *cf, void *conf);
+    void       *(*create_main_conf)(ngx_conf_t *cf);                        // 调用该函数创建本模块位于http block的配置信息存储结构
+    char       *(*init_main_conf)(ngx_conf_t *cf, void *conf);              // 调用该函数初始化本模块位于http block的配置信息存储结构
 
-    void       *(*create_srv_conf)(ngx_conf_t *cf);
-    char       *(*merge_srv_conf)(ngx_conf_t *cf, void *prev, void *conf);
+    void       *(*create_srv_conf)(ngx_conf_t *cf);                         // 调用该函数创建本模块位于http server block的配置信息存储结构，
+                                                                            // 每个server block会创建一个
+    char       *(*merge_srv_conf)(ngx_conf_t *cf, void *prev, void *conf);  // 因为有些配置指令既可以出现在http block，
+                                                                            // 也可以出现在http server block中。那么遇到这种情况，
+                                                                            //  每个server都会有自己存储结构来存储该server的配置，
+                                                                            //  但是在这种情况下http block中的配置与server block
+                                                                            //  中的配置信息发生冲突的时候，就需要调用此函数进行合并
 
-    void       *(*create_loc_conf)(ngx_conf_t *cf);
-    char       *(*merge_loc_conf)(ngx_conf_t *cf, void *prev, void *conf);
+    void       *(*create_loc_conf)(ngx_conf_t *cf);                         // 调用该函数创建本模块位于location block的配置信息存储结构。
+                                                                            // 每个在配置中指明的location创建一个
+    char       *(*merge_loc_conf)(ngx_conf_t *cf, void *prev, void *conf);  // 与merge_srv_conf类似
 } ngx_http_module_t;
 
 

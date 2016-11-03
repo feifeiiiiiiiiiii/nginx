@@ -215,6 +215,7 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
 
         module = ngx_modules[i]->ctx;
 
+        // 初始化模块需要的配置信息
         if (module->create_conf) {
             rv = module->create_conf(cycle);
             if (rv == NULL) {
@@ -342,7 +343,7 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
     /* open the new files */
 
     part = &cycle->open_files.part;
-    file = part->elts;
+    file = part->elts; // [access.log error.log]
 
     for (i = 0; /* void */ ; i++) {
 

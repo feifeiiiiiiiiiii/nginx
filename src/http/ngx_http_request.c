@@ -928,6 +928,7 @@ ngx_http_process_request_line(ngx_event_t *rev)
     for ( ;; ) {
 
         if (rc == NGX_AGAIN) {
+            // 拷贝内核缓冲区TCP数据流到headers_in缓冲池里
             n = ngx_http_read_request_header(r);
 
             if (n == NGX_AGAIN || n == NGX_ERROR) {
@@ -935,6 +936,7 @@ ngx_http_process_request_line(ngx_event_t *rev)
             }
         }
 
+        // 解析http请求头
         rc = ngx_http_parse_request_line(r, r->header_in);
 
         if (rc == NGX_OK) {
@@ -1324,6 +1326,7 @@ ngx_http_process_request_headers(ngx_event_t *rev)
 
             r->http_state = NGX_HTTP_PROCESS_REQUEST_STATE;
 
+            // 检查接收到的HTTP头是否合法
             rc = ngx_http_process_request_header(r);
 
             if (rc != NGX_OK) {
@@ -1895,6 +1898,7 @@ ngx_http_process_request(ngx_http_request_t *r)
     r->stat_writing = 1;
 #endif
 
+    // 重新设置读写回调方法
     c->read->handler = ngx_http_request_handler;
     c->write->handler = ngx_http_request_handler;
     r->read_event_handler = ngx_http_block_reading;

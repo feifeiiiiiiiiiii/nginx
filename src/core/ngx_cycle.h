@@ -35,7 +35,7 @@ struct ngx_shm_zone_s {
 
 
 struct ngx_cycle_s {
-    void                  ****conf_ctx;
+    void                  ****conf_ctx;   // 索引每一个模块的配置信息
     ngx_pool_t               *pool;
 
     ngx_log_t                *log;
@@ -49,7 +49,7 @@ struct ngx_cycle_s {
 
     ngx_queue_t               reusable_connections_queue;
 
-    ngx_array_t               listening;
+    ngx_array_t               listening; // nginx配置文件中要开启虚拟主机服务
     ngx_array_t               paths;
     ngx_list_t                open_files;
     ngx_list_t                shared_memory;

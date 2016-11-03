@@ -728,6 +728,7 @@ ngx_event_process_init(ngx_cycle_t *cycle)
 
     /* for each listening socket */
 
+    // 对每个监听的socket加入accept处理函数
     ls = cycle->listening.elts;
     for (i = 0; i < cycle->listening.nelts; i++) {
 

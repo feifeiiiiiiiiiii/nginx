@@ -347,6 +347,7 @@ failed:
 }
 
 
+/* 初始化http阶段 这里面明确指明了到底哪些阶段可以被自定义 */
 static ngx_int_t
 ngx_http_init_phases(ngx_conf_t *cf, ngx_http_core_main_conf_t *cmcf)
 {

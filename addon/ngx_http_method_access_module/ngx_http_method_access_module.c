@@ -85,7 +85,7 @@ ngx_http_method_access_handler(ngx_http_request_t *r)
     ngx_uint_t i = 0;
     while (i < method_allows_len) {
         if (ngx_strncmp(value[i].data, method_name.data, method_name.len) == 0) {
-            return NGX_OK;
+            return NGX_DECLINED;
         }
         i++;
     }

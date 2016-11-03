@@ -110,7 +110,7 @@ struct ngx_module_s {
 
     ngx_uint_t            version;
 
-    void                 *ctx;
+    void                 *ctx;            // 对应模块的上下文  具体指ngx_core_module_t/ngx_http_module_t
     ngx_command_t        *commands;
     ngx_uint_t            type;
 
@@ -138,8 +138,8 @@ struct ngx_module_s {
 
 typedef struct {
     ngx_str_t             name;
-    void               *(*create_conf)(ngx_cycle_t *cycle);
-    char               *(*init_conf)(ngx_cycle_t *cycle, void *conf);
+    void               *(*create_conf)(ngx_cycle_t *cycle);       //  模块配置的初始化
+    char               *(*init_conf)(ngx_cycle_t *cycle, void *conf); // 解析配置
 } ngx_core_module_t;
 
 

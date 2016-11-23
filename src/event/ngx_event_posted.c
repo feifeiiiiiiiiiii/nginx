@@ -10,8 +10,8 @@
 #include <ngx_event.h>
 
 
-ngx_queue_t  ngx_posted_accept_events;
-ngx_queue_t  ngx_posted_events;
+ngx_queue_t  ngx_posted_accept_events; // 存放新连接事件的队列
+ngx_queue_t  ngx_posted_events;        // 普通事件的队列
 
 
 void

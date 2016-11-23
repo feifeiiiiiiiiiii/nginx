@@ -36,30 +36,30 @@ struct ngx_shm_zone_s {
 
 struct ngx_cycle_s {
     void                  ****conf_ctx;   // 索引每一个模块的配置信息
-    ngx_pool_t               *pool;
+    ngx_pool_t               *pool;       // 内存池
 
     ngx_log_t                *log;
     ngx_log_t                 new_log;
 
     ngx_uint_t                log_use_stderr;  /* unsigned  log_use_stderr:1; */
 
-    ngx_connection_t        **files;
-    ngx_connection_t         *free_connections;
-    ngx_uint_t                free_connection_n;
+    ngx_connection_t        **files;            // 连接文件  
+    ngx_connection_t         *free_connections; // 当前空闲连接所在的位置
+    ngx_uint_t                free_connection_n; // 空闲连接数量
 
-    ngx_queue_t               reusable_connections_queue;
+    ngx_queue_t               reusable_connections_queue; // 可复用连接队列
 
     ngx_array_t               listening; // nginx配置文件中要开启虚拟主机服务
     ngx_array_t               paths;
     ngx_list_t                open_files;
-    ngx_list_t                shared_memory;
+    ngx_list_t                shared_memory;    // 共享内存
 
-    ngx_uint_t                connection_n;
-    ngx_uint_t                files_n;
+    ngx_uint_t                connection_n;     // 连接总数
+    ngx_uint_t                files_n;          
 
-    ngx_connection_t         *connections;
-    ngx_event_t              *read_events;
-    ngx_event_t              *write_events;
+    ngx_connection_t         *connections;      // 连接列表
+    ngx_event_t              *read_events;      // 可读事件列表
+    ngx_event_t              *write_events;     // 可写事件列表
 
     ngx_cycle_t              *old_cycle;
 

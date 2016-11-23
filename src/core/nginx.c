@@ -413,7 +413,7 @@ main(int argc, char *const *argv)
     ngx_use_stderr = 0;
 
     if (ngx_process == NGX_PROCESS_SINGLE) {
-        ngx_single_process_cycle(cycle);
+        ngx_single_process_cycle(cycle);    // 单进程运行
 
     } else {
         ngx_master_process_cycle(cycle);

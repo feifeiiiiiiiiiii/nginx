@@ -292,7 +292,7 @@ ngx_single_process_cycle(ngx_cycle_t *cycle)
         /* fatal */
         exit(2);
     }
-
+    // 初始化所有模块的init_process 比如最重要的ngx_event_core_module模块
     for (i = 0; ngx_modules[i]; i++) {
         if (ngx_modules[i]->init_process) {
             if (ngx_modules[i]->init_process(cycle) == NGX_ERROR) {
@@ -302,9 +302,11 @@ ngx_single_process_cycle(ngx_cycle_t *cycle)
         }
     }
 
+    // 进入无限月读中
     for ( ;; ) {
         ngx_log_debug0(NGX_LOG_DEBUG_EVENT, cycle->log, 0, "worker cycle");
 
+        // 处理可读写&定时器事件
         ngx_process_events_and_timers(cycle);
 
         if (ngx_terminate || ngx_quit) {

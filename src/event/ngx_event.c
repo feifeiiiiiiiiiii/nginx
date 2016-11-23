@@ -245,23 +245,31 @@ ngx_process_events_and_timers(ngx_cycle_t *cycle)
 
     delta = ngx_current_msec;
 
+    // eg: epoll开始wait事件了,ngx_process_events的具体实现是对应到 
+    // epoll模块中的ngx_epoll_process_events函数
     (void) ngx_process_events(cycle, timer, flags);
 
+    // 统计本次wait事件的耗时
     delta = ngx_current_msec - delta;
 
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT, cycle->log, 0,
                    "timer delta: %M", delta);
 
+    // 处理已accept的请求
     ngx_event_process_posted(cycle, &ngx_posted_accept_events);
 
     if (ngx_accept_mutex_held) {
         ngx_shmtx_unlock(&ngx_accept_mutex);
     }
 
+    // elta是上文对epoll wait事件的耗时统计，存在毫秒级的耗时 
+    // 就对所有事件的timer进行检查，如果time out就从timer rbtree中， 
+    // 删除到期的timer，同时调用相应事件的handler函数完成处理
     if (delta) {
         ngx_event_expire_timers();
     }
 
+    // 处理普通事件的队列
     ngx_event_process_posted(cycle, &ngx_posted_events);
 }
 
@@ -306,7 +314,6 @@ ngx_handle_read_event(ngx_event_t *rev, ngx_uint_t flags)
 
             return NGX_OK;
         }
-
     } else if (ngx_event_flags & NGX_USE_EVENTPORT_EVENT) {
 
         /* event ports */
@@ -810,7 +817,7 @@ ngx_event_process_init(ngx_cycle_t *cycle)
 
 #else
 
-        rev->handler = ngx_event_accept;
+        rev->handler = ngx_event_accept;    // 挂载accept处理
 
         if (ngx_use_accept_mutex) {
             continue;

@@ -16,6 +16,7 @@ typedef struct {
 } ngx_array_t;
 
 ngx_array_t *ngx_array_create(ngx_pool_t *p, ngx_uint_t n, size_t size);
+void *ngx_array_push(ngx_array_t *a);
 void ngx_array_destory(ngx_array_t *a);
 
 static ngx_int_t

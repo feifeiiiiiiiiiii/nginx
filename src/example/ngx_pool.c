@@ -27,7 +27,6 @@ void *ngx_palloc(ngx_pool_t *pool, size_t size) {
   p = pool->current;
 
   do {
-    // NGX 会对分配的内存进行对齐使用 这里忽略
     if ((size_t) (p->d.end - p->d.last) >= size) {
       p->d.last = p->d.last + size;
       return p->d.last - size;
@@ -48,6 +47,7 @@ static void *ngx_palloc_block(ngx_pool_t *pool, size_t size) {
   m = malloc(psize);
 
   if(m == NULL) {
+    printf("ngx_palloc_block alloc failed\n");
     return NULL;
   }
 
@@ -59,6 +59,10 @@ static void *ngx_palloc_block(ngx_pool_t *pool, size_t size) {
   m += sizeof(ngx_pool_data_t);
 
   new->d.last = m + size;
+
+  for (p = pool->current; p->d.next; p = p->d.next) {
+    pool->current = p->d.next;
+  }
 
   p->d.next = new;
   return m;

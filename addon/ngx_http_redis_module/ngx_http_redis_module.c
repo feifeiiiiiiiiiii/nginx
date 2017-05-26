@@ -444,6 +444,7 @@ ngx_http_redis_filter(void *data, ssize_t bytes)
     cl->buf->last = b->last;
 
     cl->buf->tag = u->output.tag;
+    u->length = 0;
 
     return NGX_OK;
 }
@@ -458,7 +459,7 @@ ngx_http_redis_abort_request(ngx_http_request_t *r)
 static void
 ngx_http_redis_finalize_request(ngx_http_request_t *r, ngx_int_t rc)
 {
-  ngx_log_error(NGX_LOG_NOTICE, r->connection->log, 0, "finalize request");
+  ngx_log_error(NGX_LOG_NOTICE, r->connection->log, 0, "finalize request %d", rc);
   if (rc >= NGX_HTTP_SPECIAL_RESPONSE) {
     r->headers_out.status = rc;
   }
